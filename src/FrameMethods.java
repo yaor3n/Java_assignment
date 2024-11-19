@@ -8,7 +8,7 @@ public class FrameMethods {
         frame.setSize(800, 650);
         frame.setTitle("APU Psychology Consultation Management System");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
+        frame.setResizable(false); // set false when submit
         frame.getContentPane().setBackground(new Color(0xDFF2EB));
         frame.setLayout(null);
         frame.setVisible(true);
