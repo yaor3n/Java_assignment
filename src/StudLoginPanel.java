@@ -4,60 +4,36 @@ import java.awt.event.*;
 
 public class StudLoginPanel extends JFrame implements ActionListener {
 
+    private JLabel enterUsername, enterPassword;
     private JButton SubmitButtonStud, LoginBackStud;
+    private JTextField StudUsername;
+    private JPasswordField StudPassword;
 
     StudLoginPanel() {
         // label to prompt username input
-        JLabel enterUsername = new JLabel("Enter Student username: ");
-        enterUsername.setFont(new Font("Arial", Font.BOLD,25));
-        enterUsername.setForeground(new Color(0x000000));
-        enterUsername.setVerticalTextPosition(JLabel.CENTER);
-        enterUsername.setHorizontalTextPosition(JLabel.CENTER);
-        enterUsername.setBounds(250,50,500,100); // x, y, width, height
+        enterUsername = FrameMethods.labelSetup("Enter Student username: ","Arial",25,0x000000,250,50,500,100);
         this.add(enterUsername);
 
         // label to prompt password input
-        JLabel enterPassword = new JLabel("Enter Student password: ");
-        enterPassword.setFont(new Font("Arial", Font.BOLD,25));
-        enterPassword.setForeground(new Color(0x000000));
-        enterPassword.setVerticalTextPosition(JLabel.CENTER);
-        enterPassword.setHorizontalTextPosition(JLabel.CENTER);
-        enterPassword.setBounds(250,200,500,100); // x, y, width, height
+        enterPassword = FrameMethods.labelSetup("Enter Student password: ","Arial",25,0x000000,250,200,500,100);
         this.add(enterPassword);
 
-        // textbox for stud username
-        JTextField StudUsername = new JTextField();
-        StudUsername.setBounds(250,150,300,50);
-        StudUsername.setFont(new Font("Arial",Font.PLAIN,15));
-        this.add(StudUsername); // rmb add if not wont show
+        StudUsername = FrameMethods.textFieldSetup(250,150,300,50,"Arial",15);
+        this.add(StudUsername);
 
-        // textbox for stud password
-        JTextField StudPassword = new JTextField();
-        StudPassword.setBounds(250,300,300,50);
-        StudUsername.setFont(new Font("Arial",Font.PLAIN,15));
+        // textbox for lec password
+        StudPassword = FrameMethods.passwordFieldSetup(250,300,300,50,"Arial",15);
         this.add(StudPassword);
 
         // back button
-        LoginBackStud = new JButton();
-        LoginBackStud.setText("Back");
-        LoginBackStud.setFont(new Font("Arial",Font.BOLD,25));
-        LoginBackStud.setForeground(new Color(0x000000));
-        LoginBackStud.addActionListener(this);
-        LoginBackStud.setBounds(350,455,100,50);
-        LoginBackStud.setBackground(new Color(0x7AB2D3));
+        LoginBackStud = FrameMethods.buttonSetup("Back","Arial",25,0x000000,this,350,455,100,50,0x7AB2D3);
         this.add(LoginBackStud);
 
         // submit button
-        SubmitButtonStud = new JButton();
-        SubmitButtonStud.setText("Login");
-        SubmitButtonStud.setFont(new Font("Arial",Font.BOLD,25));
-        SubmitButtonStud.setForeground(new Color(0x000000));
-        SubmitButtonStud.addActionListener(this);
-        SubmitButtonStud.setBounds(335,375,125,50);
-        SubmitButtonStud.setBackground(new Color(0x7AB2D3));
+        SubmitButtonStud = FrameMethods.buttonSetup("Login","Arial",25,0x000000,this,335,375,125,50,0x7AB2D3);
         this.add(SubmitButtonStud);
 
-        FrameMethods.loginSetup(this);
+        FrameMethods.windowSetup(this);
 
     }
 
@@ -67,7 +43,10 @@ public class StudLoginPanel extends JFrame implements ActionListener {
             new UserSelect();
             dispose();
         } else if (studActionA.getSource() == SubmitButtonStud) {
-            System.out.println("submitted");
+            String username = StudUsername.getText();
+            String password = new String(StudPassword.getPassword());
+            System.out.println("Student Username: " + username + " is valid");
+            System.out.println("Student Password: " + password + " is valid");
         }
 
     }

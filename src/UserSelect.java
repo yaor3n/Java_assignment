@@ -11,46 +11,23 @@ public class UserSelect extends JFrame implements ActionListener {
     UserSelect() {
 
         // role selection label
-        chooseRole = new JLabel("Who are you?");
-        chooseRole.setFont(new Font("Arial",Font.BOLD,25));
-        chooseRole.setForeground(new Color(0x000000));
-        chooseRole.setVerticalTextPosition(JLabel.CENTER);
-        chooseRole.setHorizontalTextPosition(JLabel.CENTER);
-        chooseRole.setBounds(300,50,300,100); // x, y, width, height
+        chooseRole = FrameMethods.labelSetup("Who are you?","Arial",25,0x000000,300,50,300,100);
         this.add(chooseRole);
 
         // lecturer button
-        lecButton = new JButton();
-        lecButton.setText("Lecturer");
-        lecButton.setFont(new Font("Arial",Font.BOLD,25));
-        lecButton.setForeground(new Color(0x0000));
-        lecButton.addActionListener(this);
-        lecButton.setBounds(225,150,300,100);
-        lecButton.setBackground(new Color(0x7AB2D3));
+        lecButton = FrameMethods.buttonSetup("Lecturer","Arial",25,0x000000,this,225,150,300,100,0x7AB2D3);
         this.add(lecButton);
 
         // student button
-        studButton = new JButton();
-        studButton.setText("Student");
-        studButton.setFont(new Font("Arial",Font.BOLD,25));
-        studButton.setForeground(new Color(0x000000));
-        studButton.addActionListener(this);
-        studButton.setBounds(225,275,300,100);
-        studButton.setBackground(new Color(0x7AB2D3));
+        studButton = FrameMethods.buttonSetup("Student","Arial",25,0x000000,this,225,275,300,100,0X7AB2D3);
         this.add(studButton);
 
         // create acc button
-        createAcc = new JButton();
-        createAcc.setText("Create an Account");
-        createAcc.setFont(new Font("Arial",Font.BOLD,25));
-        createAcc.setForeground(new Color(0x000000));
-        createAcc.addActionListener(this);
-        createAcc.setBounds(225,400,300,100);
-        createAcc.setBackground(new Color(0x7AB2D3));
+        createAcc = FrameMethods.buttonSetup("Create an Account","Arial",25,0x000000,this,225,400,300,100,0X7AB2D3);
         this.add(createAcc);
 
         // must be on bottom so it doesnt override the label
-        FrameMethods.loginSetup(this);
+        FrameMethods.windowSetup(this);
 
         }
 

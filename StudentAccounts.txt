@@ -1,0 +1,3 @@
+student,123,Student
+lec,123,Lecturer
+Lecturer,123,Lecturer

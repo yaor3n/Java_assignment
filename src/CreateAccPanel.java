@@ -1,69 +1,84 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 
 public class CreateAccPanel extends JFrame implements  ActionListener {
 
-    private JLabel createAccLabel, enterUsername, enterPassword;
+    private JLabel createAccLabel, enterUsername, enterPassword, chooseAccType;
     private JButton SubmitButtonCreAcc, CreAccBackBtn;
+    private JTextField createUsername, createPassword;
+    private JRadioButton lecRadioButton, studRadioButton;
+    private ButtonGroup accountTypeGroup;
 
     CreateAccPanel() {
 
-        createAccLabel = new JLabel("Account Creation");
-        createAccLabel.setFont(new Font("Arial",Font.BOLD,30));
-        createAccLabel.setForeground(new Color(0x000000));
-        createAccLabel.setVerticalTextPosition(JLabel.CENTER);
-        createAccLabel.setHorizontalTextPosition(JLabel.CENTER);
-        createAccLabel.setBounds(250,25,300,100);
+        createAccLabel = FrameMethods.labelSetup("Account Creation","Arial",30,0x000000,250,25,300,100);
         this.add(createAccLabel);
 
-        enterUsername = new JLabel("Enter Username:");
-        enterUsername.setFont(new Font("Arial",Font.BOLD,25));
-        enterUsername.setForeground(new Color(0x000000));
-        enterUsername.setVerticalTextPosition(JLabel.CENTER);
-        enterUsername.setHorizontalTextPosition(JLabel.CENTER);
-        enterUsername.setBounds(50,85,300,100);
+        // label to prompt username input
+        enterUsername = FrameMethods.labelSetup("Enter Username: ","Arial",25,0x000000,50,85,300,100);
         this.add(enterUsername);
 
-        JTextField createUsername = new JTextField();
-        createUsername.setBounds(50,150,300,50);
-        createUsername.setFont(new Font("Arial",Font.PLAIN,15));
-        this.add(createUsername);
-
-        enterPassword = new JLabel("Enter Password:");
-        enterPassword.setFont(new Font("Arial",Font.BOLD,25));
-        enterPassword.setForeground(new Color(0x000000));
-        enterPassword.setVerticalTextPosition(JLabel.CENTER);
-        enterPassword.setHorizontalTextPosition(JLabel.CENTER);
-        enterPassword.setBounds(50,225,300,100);
+        // label to prompt password input
+        enterPassword = FrameMethods.labelSetup("Enter Password: ","Arial",25,0x000000,50,225,300,100);
         this.add(enterPassword);
 
-        JTextField createPassword = new JTextField();
-        createPassword.setBounds(50,300,300,50);
-        createPassword.setFont(new Font("Arial",Font.PLAIN,15));
+        createUsername = FrameMethods.textFieldSetup(50,150,300,50,"Arial",15);
+        this.add(createUsername);
+
+        createPassword = FrameMethods.textFieldSetup(50,300,300,50,"Arial",15);
         this.add(createPassword);
 
-        CreAccBackBtn = new JButton();
-        CreAccBackBtn.setText("Back");
-        CreAccBackBtn.setFont(new Font("Arial",Font.BOLD,25));
-        CreAccBackBtn.setForeground(new Color(0x000000));
-        CreAccBackBtn.addActionListener(this);
-        CreAccBackBtn.setBounds(350,455,100,50);
-        CreAccBackBtn.setBackground(new Color(0x7AB2D3));
+        // back button
+        CreAccBackBtn = FrameMethods.buttonSetup("Back","Arial",25,0x000000,this,350,455,100,50,0x7AB2D3);
         this.add(CreAccBackBtn);
 
-        SubmitButtonCreAcc = new JButton();
-        SubmitButtonCreAcc.setText("Create Account");
-        SubmitButtonCreAcc.setFont(new Font("Arial",Font.BOLD,25));
-        SubmitButtonCreAcc.setForeground(new Color(0x000000));
-        SubmitButtonCreAcc.addActionListener(this);
-        SubmitButtonCreAcc.setBounds(250,375,300,50);
-        SubmitButtonCreAcc.setBackground(new Color(0x7AB2D3));
+        // submit button
+        SubmitButtonCreAcc = FrameMethods.buttonSetup("Create Account","Arial",25,0x000000,this,250,375,300,50,0x7AB2D3);
         this.add(SubmitButtonCreAcc);
 
+        // idk anymore
+        chooseAccType = FrameMethods.labelSetup("Account Type:","Arial",25,0x000000,450,85,300,100);
+        this.add(chooseAccType);
 
-        FrameMethods.loginSetup(this);
+        // radio for student option
+        studRadioButton = FrameMethods.radioButtonSetup("Student","Arial",20,0x000000,450,190,200,50,0xDFF2EB);
+        this.add(studRadioButton);
 
+        // lecturer radio button
+        lecRadioButton = FrameMethods.radioButtonSetup("Lecturer","Arial",20,0x000000,450,250,200,50,0xDFF2EB);
+        this.add(lecRadioButton);
+
+        // grouping the radio buttons
+        accountTypeGroup = new ButtonGroup();
+        accountTypeGroup.add(lecRadioButton);
+        accountTypeGroup.add(studRadioButton);
+
+
+        FrameMethods.windowSetup(this);
+
+    }
+    private boolean isUsernameTaken(String username) {
+
+        String[] files = {"StudentAccounts.txt", "LecturerAccounts.txt"};
+
+        for (String file : files) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split(",");
+                    if (parts.length > 0 && parts[0].equals(username)) {
+                        return true; // Username already exists
+                    }
+                }
+            } catch (FileNotFoundException e) {
+                System.err.println("File not found: " + file);
+            } catch (IOException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error checking username. Please try again.");
+        }
+        return false;
     }
 
     @Override
@@ -72,7 +87,47 @@ public class CreateAccPanel extends JFrame implements  ActionListener {
             new UserSelect();
             this.dispose();
         } else if (CreAccA.getSource() == SubmitButtonCreAcc) {
-            System.out.println("created");
+            String username = createUsername.getText();
+            String password = createPassword.getText();
+            String accountType = "";
+
+            // checking for empty fields
+            if (username.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Enter both Username and Password.");
+                return;
+            }
+
+            // Determine account type based on radio button selection
+            if (lecRadioButton.isSelected()) {
+                accountType = "Lecturer";
+            } else if (studRadioButton.isSelected()) {
+                accountType = "Student";
+            } else {
+                JOptionPane.showMessageDialog(this, "Please select an account type.");
+                return;
+            }
+
+            // check for duplicate usernames
+            if (isUsernameTaken(username)) {
+                JOptionPane.showMessageDialog(this, "Username already exists. Please choose another.");
+                return;
+            }
+
+            // see what file to write based on account type
+            String fileName = accountType.equals("Lecturer") ? "LecturerAccounts.txt" : "StudentAccounts.txt";
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("StudentAccounts.txt", true))) {
+                writer.write(username + "," + password + "," + accountType);
+                writer.newLine();
+                JOptionPane.showMessageDialog(this, "Account created successfully!");
+                // Optionally, clear the fields after successful creation
+                createUsername.setText("");
+                createPassword.setText("");
+                accountTypeGroup.clearSelection();
+            } catch (IOException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error saving account. Try again.");
+            }
         }
     }
 

@@ -1,68 +1,45 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 
 public class LecLoginPanel extends JFrame implements ActionListener {
 // btw ActionListener will have error until u actually implement it in a button
+
+    private JLabel enterUsername, enterPassword;
     private JButton SubmitButtonLec, LoginBackLec;
+    private JTextField LecUsername;
+    private JPasswordField LecPassword;
 
     LecLoginPanel() {
 
         // label to prompt username input
-        JLabel enterUsername = new JLabel("Enter Lecturer username: ");
-        enterUsername.setFont(new Font("Arial", Font.BOLD,25));
-        enterUsername.setForeground(new Color(0x000000));
-        enterUsername.setVerticalTextPosition(JLabel.CENTER);
-        enterUsername.setHorizontalTextPosition(JLabel.CENTER);
-        enterUsername.setBounds(250,50,500,100); // x, y, width, height
+        enterUsername = FrameMethods.labelSetup("Enter Lecturer username: ", "Arial", 25, 0x000000, 250, 50, 500, 100);
         this.add(enterUsername);
 
         // label to prompt password input
-        JLabel enterPassword = new JLabel("Enter Lecturer password: ");
-        enterPassword.setFont(new Font("Arial", Font.BOLD,25));
-        enterPassword.setForeground(new Color(0x000000));
-        enterPassword.setVerticalTextPosition(JLabel.CENTER);
-        enterPassword.setHorizontalTextPosition(JLabel.CENTER);
-        enterPassword.setBounds(250,200,500,100); // x, y, width, height
+        enterPassword = FrameMethods.labelSetup("Enter Lecturer password: ", "Arial", 25, 0x000000, 250, 200, 500, 100);
         this.add(enterPassword);
 
         // textbox for lec username
-        JTextField LecUsername = new JTextField();
-        LecUsername.setBounds(250,150,300,50);
-        LecUsername.setFont(new Font("Arial",Font.PLAIN,15));
-        this.add(LecUsername); // rmb add if not wont show
+
+        LecUsername = FrameMethods.textFieldSetup(250, 150, 300, 50, "Arial", 15);
+        this.add(LecUsername);
 
         // textbox for lec password
-        JTextField LecPassword = new JTextField();
-        LecPassword.setBounds(250,300,300,50);
-        LecUsername.setFont(new Font("Arial",Font.PLAIN,15));
+        LecPassword = FrameMethods.passwordFieldSetup(250, 300, 300, 50, "Arial", 15);
         this.add(LecPassword);
 
         // back button
-        LoginBackLec = new JButton();
-        LoginBackLec.setText("Back");
-        LoginBackLec.setFont(new Font("Arial",Font.BOLD,25));
-        LoginBackLec.setForeground(new Color(0x000000));
-        LoginBackLec.addActionListener(this);
-        LoginBackLec.setBounds(350,455,100,50);
-        LoginBackLec.setBackground(new Color(0x7AB2D3));
+        LoginBackLec = FrameMethods.buttonSetup("Back", "Arial", 25, 0x000000, this, 350, 455, 100, 50, 0x7AB2D3);
         this.add(LoginBackLec);
-        // didnt work last time cuz i didnt use class level instead i used this:
-        // JButon LoginBackLec = new blablabla
 
         // submit button
-        SubmitButtonLec = new JButton();
-        SubmitButtonLec.setText("Login");
-        SubmitButtonLec.setFont(new Font("Arial",Font.BOLD,25));
-        SubmitButtonLec.setForeground(new Color(0x000000));
-        SubmitButtonLec.addActionListener(this);
-        SubmitButtonLec.setBounds(335,375,125,50);
-        SubmitButtonLec.setBackground(new Color(0x7AB2D3));
+        SubmitButtonLec = FrameMethods.buttonSetup("Login", "Arial", 25, 0x000000, this, 335, 375, 125, 50, 0x7AB2D3);
         this.add(SubmitButtonLec);
 
 
-        FrameMethods.loginSetup(this); // jus reuse this for window template
-
+        FrameMethods.windowSetup(this);
 
     }
 
@@ -72,9 +49,41 @@ public class LecLoginPanel extends JFrame implements ActionListener {
             new UserSelect();
             this.dispose();
         } else if (lecActionA.getSource() == SubmitButtonLec) {
-            System.out.println("submitted");
+            String username = LecUsername.getText();
+            String password = new String(LecPassword.getPassword());
+
+            if (username.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please Enter both username and password.");
+                return;
+            }
+
+            if (verifyCredentials(username, password)) {
+                JOptionPane.showMessageDialog(this, "Login successful! Welcome, " + username);
+                this.dispose();
+                new LecturerDashboardPanel();
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid username or password, please try again!");
+            }
+
         }
 
     }
 
+    private boolean verifyCredentials(String username, String password) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("LecturerAccounts.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 2 && parts[0].equals(username) && parts[1].equals(password)) {
+                    return true;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(this, "Account file not found. Please contact support.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error reading account file. Please try again later.");
+        }
+        return false;
+    }
 }
