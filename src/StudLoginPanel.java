@@ -35,6 +35,7 @@ public class StudLoginPanel extends JFrame implements ActionListener {
 
         FrameMethods.windowSetup(this);
 
+
     }
 
     @Override

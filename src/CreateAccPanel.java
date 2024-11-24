@@ -77,9 +77,11 @@ public class CreateAccPanel extends JFrame implements  ActionListener {
             } catch (IOException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Error checking username. Please try again.");
+            }
         }
         return false;
     }
+
 
     @Override
     public void actionPerformed(ActionEvent CreAccA) {
