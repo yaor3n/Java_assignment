@@ -1,10 +1,8 @@
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 
 public class LecLoginPanel extends JFrame implements ActionListener {
-// btw ActionListener will have error until u actually implement it in a button
 
     private JLabel enterUsername, enterPassword;
     private JButton SubmitButtonLec, LoginBackLec;
@@ -12,7 +10,6 @@ public class LecLoginPanel extends JFrame implements ActionListener {
     private JPasswordField LecPassword;
 
     LecLoginPanel() {
-
         // label to prompt username input
         enterUsername = FrameMethods.labelSetup("Enter Lecturer username: ", "Arial", 25, 0x000000, 250, 50, 500, 100);
         this.add(enterUsername);
@@ -22,7 +19,6 @@ public class LecLoginPanel extends JFrame implements ActionListener {
         this.add(enterPassword);
 
         // textbox for lec username
-
         LecUsername = FrameMethods.textFieldSetup(250, 150, 300, 50, "Arial", 15);
         this.add(LecUsername);
 
@@ -38,16 +34,14 @@ public class LecLoginPanel extends JFrame implements ActionListener {
         SubmitButtonLec = FrameMethods.buttonSetup("Login", "Arial", 25, 0x000000, this, 335, 375, 125, 50, 0x7AB2D3);
         this.add(SubmitButtonLec);
 
-
         FrameMethods.windowSetup(this);
-
     }
 
     @Override
     public void actionPerformed(ActionEvent lecActionA) {
         if (lecActionA.getSource() == LoginBackLec) {
             new UserSelect();
-            this.dispose();
+            dispose();
         } else if (lecActionA.getSource() == SubmitButtonLec) {
             String username = LecUsername.getText();
             String password = new String(LecPassword.getPassword());
@@ -57,33 +51,32 @@ public class LecLoginPanel extends JFrame implements ActionListener {
                 return;
             }
 
-            if (verifyCredentials(username, password)) {
+            String accountType = verifyCredentials(username, password);
+            if (accountType == null) {
+                JOptionPane.showMessageDialog(this, "Invalid username or password. Please try again!");
+            } else if (!accountType.equals("Lecturer")) {
+                JOptionPane.showMessageDialog(this, "This is a Student account. Please log in with a Lecturer account.");
+            } else {
                 JOptionPane.showMessageDialog(this, "Login successful! Welcome, " + username);
                 this.dispose();
                 new LecturerDashboardPanel();
-            } else {
-                JOptionPane.showMessageDialog(this, "Invalid username or password, please try again!");
             }
-
         }
-
     }
 
-    private boolean verifyCredentials(String username, String password) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("LecturerAccounts.txt"))) {
+    private String verifyCredentials(String username, String password) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("Accounts.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length == 2 && parts[0].equals(username) && parts[1].equals(password)) {
-                    return true;
+                if (parts.length == 3 && parts[0].equals(username) && parts[1].equals(password)) {
+                    return parts[2]; // Return account type (Lecturer or Student)
                 }
             }
-        } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(this, "Account file not found. Please contact support.");
         } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error reading account file. Please try again later.");
         }
-        return false;
+        return null;
     }
 }

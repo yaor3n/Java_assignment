@@ -60,28 +60,22 @@ public class CreateAccPanel extends JFrame implements  ActionListener {
 
     }
     private boolean isUsernameTaken(String username) {
-
-        String[] files = {"StudentAccounts.txt", "LecturerAccounts.txt"};
-
-        for (String file : files) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    String[] parts = line.split(",");
-                    if (parts.length > 0 && parts[0].equals(username)) {
-                        return true; // Username already exists
-                    }
+        try (BufferedReader reader = new BufferedReader(new FileReader("Accounts.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length > 0 && parts[0].equals(username)) {
+                    return true; // Username already exists
                 }
-            } catch (FileNotFoundException e) {
-                System.err.println("File not found: " + file);
-            } catch (IOException e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Error checking username. Please try again.");
             }
+        } catch (FileNotFoundException e) {
+            System.err.println("Accounts file not found.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error checking username. Please try again.");
         }
         return false;
     }
-
 
     @Override
     public void actionPerformed(ActionEvent CreAccA) {
@@ -115,10 +109,8 @@ public class CreateAccPanel extends JFrame implements  ActionListener {
                 return;
             }
 
-            // see what file to write based on account type
-            String fileName = accountType.equals("Lecturer") ? "LecturerAccounts.txt" : "StudentAccounts.txt";
-
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter("StudentAccounts.txt", true))) {
+            // writing account details to txt file
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("Accounts.txt", true))) {
                 writer.write(username + "," + password + "," + accountType);
                 writer.newLine();
                 JOptionPane.showMessageDialog(this, "Account created successfully!");

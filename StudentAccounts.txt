@@ -1,5 +1,0 @@
-student,123,Student
-lec,123,Lecturer
-Lecturer,123,Lecturer
-123123,123,Student
-lec123,123,Lecturer
