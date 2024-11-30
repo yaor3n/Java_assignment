@@ -58,7 +58,7 @@ public class StudLoginPanel extends JFrame implements ActionListener {
             } else {
                 JOptionPane.showMessageDialog(this, "Login successful! Welcome, " + username);
                 this.dispose();
-                //new ();
+                new StudentDashboardPanel();
             }
         }
     }

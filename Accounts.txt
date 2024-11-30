@@ -1,0 +1,3 @@
+Adam,pass123,Lecturer
+John,pass321,Student
+lec,123,Lecturer

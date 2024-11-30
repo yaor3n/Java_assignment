@@ -37,6 +37,11 @@ public class LecLoginPanel extends JFrame implements ActionListener {
         FrameMethods.windowSetup(this);
     }
 
+    // so that other class can use this username
+    public String LecturerUsername() {
+        return LecUsername.getText();
+    }
+
     @Override
     public void actionPerformed(ActionEvent lecActionA) {
         if (lecActionA.getSource() == LoginBackLec) {
@@ -59,7 +64,8 @@ public class LecLoginPanel extends JFrame implements ActionListener {
             } else {
                 JOptionPane.showMessageDialog(this, "Login successful! Welcome, " + username);
                 this.dispose();
-                new LecturerDashboardPanel();
+                new LecturerDashboardPanel(username);
+                // ^^^ passes username from this class to LecturerDash so it doesnt break the encapsulation
             }
         }
     }
