@@ -7,15 +7,14 @@ import java.io.IOException;
 
 public class AppointSetupDash extends JFrame implements ActionListener {
 
-    private JLabel label, label2;
+    private JLabel label, label2, label3;
     private JComboBox<String> timeSlotCB, dayCB, monthCB, yearCB;
+    private JTextField EnterLecName;
     private JButton back, confirmBtn;
     private JFrame parentFrame;
-    private String lecturerUsername; // Store the logged-in lecturer's username
 
     public AppointSetupDash(JFrame parentFrame, String lecturerUsername) {
         this.parentFrame = parentFrame; // Set the parent frame
-        this.lecturerUsername = lecturerUsername; // Initialize the username
 
         label = FrameMethods.labelSetup("Set Available Time:", "Arial", 25, 0x000000, 50, 5, 300, 100);
         this.add(label);
@@ -78,6 +77,12 @@ public class AppointSetupDash extends JFrame implements ActionListener {
         back = FrameMethods.buttonSetup("Back", "Arial", 25, 0x000000, this, 50, 500, 100, 50, 0X7AB2D3);
         this.add(back);
 
+        label3 = FrameMethods.labelSetup("Enter lecturer name:", "Arial", 25, 0x000000, 50, 295, 300, 100);
+        this.add(label3);
+
+        EnterLecName = FrameMethods.textFieldSetup(50, 380, 300, 50, "Arial", 15);
+        this.add(EnterLecName);
+
         FrameMethods.windowSetup(this);
     }
 
@@ -99,12 +104,13 @@ public class AppointSetupDash extends JFrame implements ActionListener {
         String day = (String) dayCB.getSelectedItem();
         String month = (String) monthCB.getSelectedItem();
         String year = (String) yearCB.getSelectedItem();
+        String lecturerName = EnterLecName.getText();
 
         // Format the selected date
         String date = day + " " + month + " " + year;
 
         // Format the line to write
-        String line = lecturerUsername + "," + timeSlot + "," + date;
+        String line = lecturerName + "," + timeSlot + "," + date;
 
         // Write to file
         try (FileWriter writer = new FileWriter("appointments.txt", true)) {

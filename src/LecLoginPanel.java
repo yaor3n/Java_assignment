@@ -51,6 +51,7 @@ public class LecLoginPanel extends JFrame implements ActionListener {
             String username = LecUsername.getText();
             String password = new String(LecPassword.getPassword());
 
+            // Check if username and password are empty
             if (username.isEmpty() || password.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please Enter both username and password.");
                 return;
@@ -62,10 +63,10 @@ public class LecLoginPanel extends JFrame implements ActionListener {
             } else if (!accountType.equals("Lecturer")) {
                 JOptionPane.showMessageDialog(this, "This is a Student account. Please log in with a Lecturer account.");
             } else {
+                // Successful login
                 JOptionPane.showMessageDialog(this, "Login successful! Welcome, " + username);
                 this.dispose();
                 new LecturerDashboardPanel(username);
-                // ^^^ passes username from this class to LecturerDash so it doesnt break the encapsulation
             }
         }
     }
@@ -75,8 +76,12 @@ public class LecLoginPanel extends JFrame implements ActionListener {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                if (parts.length == 3 && parts[0].equals(username) && parts[1].equals(password)) {
-                    return parts[2]; // Return account type (Lecturer or Student)
+                if (parts.length == 3) {
+                    // Debugging to check if we are reading the file correctly
+                    System.out.println("Checking account: " + parts[0] + " against " + username);
+                    if (parts[0].equals(username) && parts[1].equals(password)) {
+                        return parts[2]; // Return account type (Lecturer or Student)
+                    }
                 }
             }
         } catch (IOException e) {
@@ -85,4 +90,5 @@ public class LecLoginPanel extends JFrame implements ActionListener {
         }
         return null;
     }
+
 }
