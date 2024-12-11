@@ -6,3 +6,4 @@ bryan,123,Student
 yaoren,123,Lecturer
 zeke,123,Lecturer
 student,123,Student
+stud,123,Student

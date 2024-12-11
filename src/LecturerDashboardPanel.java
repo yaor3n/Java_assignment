@@ -80,4 +80,7 @@ public class LecturerDashboardPanel extends JFrame implements ActionListener {
             new UserSelect();
         }
     }
+    public static void main(String[] args) {
+        new LecturerDashboardPanel();
+    }
 }

@@ -63,7 +63,7 @@ public class ConsultLec extends JFrame implements ActionListener {
                     JPanel linePanel = new JPanel();
                     linePanel.setLayout(new BorderLayout());
                     linePanel.setPreferredSize(new Dimension(680,50));
-                    linePanel.setMaximumSize(new Dimension(680,100));
+                    linePanel.setMaximumSize(new Dimension(680,50));
                     linePanel.setBackground(new Color(0xB9E5E8));
                     linePanel.setBorder(new LineBorder(Color.GRAY, 1));
 
@@ -74,12 +74,10 @@ public class ConsultLec extends JFrame implements ActionListener {
                     JButton bookButton = new JButton("Book");
                     bookButton.addActionListener(e -> {
                         // When the button is clicked, append the studentUsername and write to a file
-                        String updatedLine = appointment + " | Booked by: " + studentUsername;
-//                        appendToFile("appointments.txt", updatedLine);  // Update the appointment in the same file
-                        appendToFile("consultation.txt", updatedLine); // Save the booked appointment in consultation.txt
+                        String updatedLine = appointment + " | Booked by: " + studentUsername + "," + "pending";
+                        appendToFile("consultation.txt", updatedLine);
                         JOptionPane.showMessageDialog(this, "Booking appointment: " + updatedLine);
-                        // Refresh the frame after booking
-                        dispose();
+                        this.dispose();
                         new ConsultLec();
                     });
 
