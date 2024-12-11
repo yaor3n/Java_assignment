@@ -13,7 +13,6 @@ public class FrameMethods {
         frame.getContentPane().setBackground(new Color(0xDFF2EB));
         frame.setLayout(null);
         frame.setVisible(true);
-//        frame.setLocation(250,250);
         frame.setLocationRelativeTo(null);
 
         // window icon

@@ -19,9 +19,7 @@ public class WelcomePanel extends JFrame implements ActionListener {
         WelcomeStartBtn = FrameMethods.buttonSetup("Get Started","Arial",25,0x000000,this,225,275,300,100,0x7AB2D3);
         this.add(WelcomeStartBtn);
 
-
         FrameMethods.windowSetup(this);
-
     }
 
     @Override

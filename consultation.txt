@@ -10,3 +10,4 @@ lec,01:00 PM - 02:00 PM,01 January 2023 | Booked by: stud,approved
 lec,01:00 PM - 02:00 PM,01 January 2023 | Booked by: bryan,rejected
 lec,01:00 PM - 02:00 PM,01 January 2023 | Booked by: bryan,approved
 lec,01:00 PM - 02:00 PM,01 January 2023 | Booked by: bryan,approved
+lec,09:00 AM - 10:00 AM,01 January 2023 | Booked by: bryan,rejected
