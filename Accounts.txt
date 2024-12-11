@@ -3,3 +3,6 @@ John,pass321,Student
 lec,123,Lecturer
 raul,123,Lecturer
 bryan,123,Student
+yaoren,123,Lecturer
+zeke,123,Lecturer
+student,123,Student

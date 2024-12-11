@@ -118,6 +118,8 @@ public class CreateAccPanel extends JFrame implements  ActionListener {
                 createUsername.setText("");
                 createPassword.setText("");
                 accountTypeGroup.clearSelection();
+                new UserSelect();
+                this.dispose();
             } catch (IOException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Error saving account. Try again.");

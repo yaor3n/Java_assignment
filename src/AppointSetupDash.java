@@ -9,12 +9,10 @@ public class AppointSetupDash extends JFrame implements ActionListener {
 
     private JLabel label, label2, label3;
     private JComboBox<String> timeSlotCB, dayCB, monthCB, yearCB;
-    private JTextField EnterLecName;
     private JButton back, confirmBtn;
-    private JFrame parentFrame;
 
-    public AppointSetupDash(JFrame parentFrame, String lecturerUsername) {
-        this.parentFrame = parentFrame; // Set the parent frame
+    public AppointSetupDash() {
+        String lecturerUsername = SessionManager.getLecturerUsername();
 
         label = FrameMethods.labelSetup("Set Available Time:", "Arial", 25, 0x000000, 50, 5, 300, 100);
         this.add(label);
@@ -80,9 +78,6 @@ public class AppointSetupDash extends JFrame implements ActionListener {
         label3 = FrameMethods.labelSetup("Enter lecturer name:", "Arial", 25, 0x000000, 50, 295, 300, 100);
         this.add(label3);
 
-        EnterLecName = FrameMethods.textFieldSetup(50, 380, 300, 50, "Arial", 15);
-        this.add(EnterLecName);
-
         FrameMethods.windowSetup(this);
     }
 
@@ -90,27 +85,26 @@ public class AppointSetupDash extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == back) {
             this.dispose();
-            parentFrame.setVisible(true);
+            new LecturerDashboardPanel();
         } else if (e.getSource() == confirmBtn) {
             saveToFile();
             this.dispose();
-            parentFrame.setVisible(true);
+            new LecturerDashboardPanel();
         }
     }
 
     private void saveToFile() {
-        // Get the selected values
         String timeSlot = (String) timeSlotCB.getSelectedItem();
         String day = (String) dayCB.getSelectedItem();
         String month = (String) monthCB.getSelectedItem();
         String year = (String) yearCB.getSelectedItem();
-        String lecturerName = EnterLecName.getText();
+//        String lecturerName = EnterLecName.getText();
 
         // Format the selected date
         String date = day + " " + month + " " + year;
 
         // Format the line to write
-        String line = lecturerName + "," + timeSlot + "," + date;
+        String line = SessionManager.getLecturerUsername() + "," + timeSlot + "," + date;
 
         // Write to file
         try (FileWriter writer = new FileWriter("appointments.txt", true)) {

@@ -9,9 +9,7 @@ public class ApproveAppointmentPanel extends JFrame implements ActionListener {
     private JButton back;
     private JFrame parentFrame;
 
-    ApproveAppointmentPanel(JFrame parentFrame) {
-
-        this.parentFrame = parentFrame;
+    ApproveAppointmentPanel() {
 
         back = FrameMethods.buttonSetup("Back","Arial",25,0x000000,this,50,500,100,50,0X7AB2D3);
         this.add(back);
@@ -24,7 +22,7 @@ public class ApproveAppointmentPanel extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == back) {
             this.dispose();
-            parentFrame.setVisible(true);
+            new LecturerDashboardPanel();
         }
     }
 

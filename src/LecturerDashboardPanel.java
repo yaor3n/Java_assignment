@@ -10,7 +10,6 @@ public class LecturerDashboardPanel extends JFrame implements ActionListener {
 
     private JLabel welcomeLabel;
     private JButton setAppointmentBtn, approveAppointmentBtn, logoutBtn;
-    private String lecturerName;
 
     SimpleDateFormat timeFormat;
     SimpleDateFormat dateFormat;
@@ -18,7 +17,9 @@ public class LecturerDashboardPanel extends JFrame implements ActionListener {
     JLabel dateLabel;
     String time;
 
-    LecturerDashboardPanel(String lecturerName) {
+    LecturerDashboardPanel() {
+
+        String lecturerName = SessionManager.getLecturerUsername();
 
         timeFormat = new SimpleDateFormat("hh:mm:ss a");
         timeLabel = new JLabel();
@@ -69,14 +70,14 @@ public class LecturerDashboardPanel extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == setAppointmentBtn) {
             this.dispose();
-            new AppointSetupDash(this, lecturerName);
+            new AppointSetupDash();
         } else if (e.getSource() == approveAppointmentBtn) {
             this.dispose();
-            new ApproveAppointmentPanel(this);
+            new ApproveAppointmentPanel();
         } else if (e.getSource() == logoutBtn) {
+            SessionManager.getInstance().clearSession();
             this.dispose();
             new UserSelect();
         }
     }
-
 }
