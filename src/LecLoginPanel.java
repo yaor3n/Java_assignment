@@ -86,5 +86,4 @@ public class LecLoginPanel extends JFrame implements ActionListener {
         }
         return null;
     }
-
 }

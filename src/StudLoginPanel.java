@@ -10,11 +10,10 @@ public class StudLoginPanel extends JFrame implements ActionListener {
     private JPasswordField StudPassword;
 
     StudLoginPanel() {
-        // label to prompt username input
+
         enterUsername = FrameMethods.labelSetup("Enter Student username: ", "Arial", 25, 0x000000, 250, 50, 500, 100);
         this.add(enterUsername);
 
-        // label to prompt password input
         enterPassword = FrameMethods.labelSetup("Enter Student password: ", "Arial", 25, 0x000000, 250, 200, 500, 100);
         this.add(enterPassword);
 
@@ -57,6 +56,7 @@ public class StudLoginPanel extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "This is a Lecturer account. Please log in with a Student account.");
             } else {
                 JOptionPane.showMessageDialog(this, "Login successful! Welcome, " + username);
+                SessionManager.setStudentUsername(username);
                 this.dispose();
                 new StudentDashboardPanel();
             }

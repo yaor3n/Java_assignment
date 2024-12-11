@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class AppointSetupDash extends JFrame implements ActionListener {
 
-    private JLabel label, label2, label3;
+    private JLabel label, label2;
     private JComboBox<String> timeSlotCB, dayCB, monthCB, yearCB;
     private JButton back, confirmBtn;
 
@@ -75,9 +75,6 @@ public class AppointSetupDash extends JFrame implements ActionListener {
         back = FrameMethods.buttonSetup("Back", "Arial", 25, 0x000000, this, 50, 500, 100, 50, 0X7AB2D3);
         this.add(back);
 
-        label3 = FrameMethods.labelSetup("Enter lecturer name:", "Arial", 25, 0x000000, 50, 295, 300, 100);
-        this.add(label3);
-
         FrameMethods.windowSetup(this);
     }
 
@@ -98,7 +95,6 @@ public class AppointSetupDash extends JFrame implements ActionListener {
         String day = (String) dayCB.getSelectedItem();
         String month = (String) monthCB.getSelectedItem();
         String year = (String) yearCB.getSelectedItem();
-//        String lecturerName = EnterLecName.getText();
 
         // Format the selected date
         String date = day + " " + month + " " + year;
@@ -114,4 +110,5 @@ public class AppointSetupDash extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this, "Error saving appointment: " + ex.getMessage());
         }
     }
+
 }
