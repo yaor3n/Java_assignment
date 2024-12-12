@@ -7,3 +7,5 @@ yaoren,123,Lecturer
 zeke,123,Lecturer
 student,123,Student
 stud,123,Student
+averylongname,123,Lecturer
+verylongname,123,Student

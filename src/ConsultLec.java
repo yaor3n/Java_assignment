@@ -36,7 +36,7 @@ public class ConsultLec extends JFrame implements ActionListener {
         getContentPane().add(scrollPane);
         setVisible(true);
 
-        back = FrameMethods.buttonSetup("Back", "Arial", 25, 0x000000, this, 350, 500, 100, 50, 0x7AB2D3);
+        back = FrameMethods.buttonSetup("Back", "Arial", 25, 0x000000, this, 50, 500, 100, 50, 0X7AB2D3);
         this.add(back);
 
 

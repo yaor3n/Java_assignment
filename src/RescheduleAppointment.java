@@ -3,39 +3,34 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.BufferedWriter;
+import java.io.*;
 
-public class ApproveAppointmentPanel extends JFrame implements ActionListener {
+public class RescheduleAppointment extends JFrame implements ActionListener {
 
-    private JButton back;
+    private JButton back, rescheduleButton;
     private JScrollPane scrollPane;
     private JPanel panel;
 
-    ApproveAppointmentPanel() {
-        back = FrameMethods.buttonSetup("Back", "Arial", 25, 0x000000, this, 50, 500, 100, 50, 0X7AB2D3);
-        this.add(back);
+    RescheduleAppointment() {
 
         panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         scrollPane = new JScrollPane(panel);
 
-        // Read consultations and check if any pending appointments exist
-        boolean hasPendingAppointments = readConsultationsFromFile("consultation.txt");
+        boolean hasRescheduleAppointments = readConsultationsFromFile("consultation.txt");
 
-        // If there are no pending appointments, display "No more requests"
-        if (!hasPendingAppointments) {
-            JLabel noRequestsLabel = new JLabel("No more requests", JLabel.CENTER);
-            noRequestsLabel.setFont(new Font("Arial", Font.BOLD, 18));
-            noRequestsLabel.setForeground(Color.RED);
-            panel.add(noRequestsLabel);
+        if (!hasRescheduleAppointments) {
+            JLabel noRescheduleLabel = new JLabel("No more Appointments", JLabel.CENTER);
+            noRescheduleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+            noRescheduleLabel.setForeground(Color.RED);
+            panel.add(noRescheduleLabel);
         }
 
-        setTitle("Approve Appointments");
+        back = FrameMethods.buttonSetup("Back", "Arial", 25, 0x000000, this, 50, 500, 100, 50, 0X7AB2D3);
+        this.add(back);
+
+        setTitle("Reschedule Appointments");
         setSize(800, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
@@ -50,18 +45,25 @@ public class ApproveAppointmentPanel extends JFrame implements ActionListener {
 
         getContentPane().add(scrollPane);
         setVisible(true);
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == back) {
+            new StudentDashboardPanel();
+            this.dispose();
+        }
     }
 
     private boolean readConsultationsFromFile(String filePath) {
-
         boolean hasPendingAppointments = false;
-        String lecturerUsername = SessionManager.getLecturerUsername();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 // Only show appointments that are pending
-                if (line.contains(lecturerUsername) && line.contains("pending") || line.contains("reschedule")) {
+                if (line.contains("pending")) {
                     hasPendingAppointments = true;
 
                     JPanel linePanel = new JPanel();
@@ -76,32 +78,22 @@ public class ApproveAppointmentPanel extends JFrame implements ActionListener {
 
                     final String appointment = line;
 
-                    // Approve Button
-                    JButton approveButton = new JButton("Approve");
-                    approveButton.addActionListener(e -> {
-                        String updatedLine = appointment.replace("pending", "approved");
+                    // Reschedule Button
+                    rescheduleButton = new JButton("Reschedule");
+                    rescheduleButton.addActionListener(e -> {
+                        String updatedLine = appointment.replace("pending", "reschedule");
                         updateAppointmentStatus("consultation.txt", appointment, updatedLine);
-                        JOptionPane.showMessageDialog(this, "Appointment approved: " + updatedLine);
+                        JOptionPane.showMessageDialog(this, "Appointment rescheduled: " + updatedLine);
                         this.dispose();
-                        new ApproveAppointmentPanel(); // Refresh the list after approval
+                        new StudentDashboardPanel();
                     });
 
-                    // Reject Button
-                    JButton rejectButton = new JButton("Reject");
-                    rejectButton.addActionListener(e -> {
-                        String updatedLine = appointment.replace("pending", "rejected");
-                        updateAppointmentStatus("consultation.txt", appointment, updatedLine);
-                        JOptionPane.showMessageDialog(this, "Appointment rejected: " + updatedLine);
-                        this.dispose();
-                        new ApproveAppointmentPanel(); // Refresh the list after rejection
-                    });
 
                     // Add components to the panel
                     linePanel.add(label, BorderLayout.CENTER);
                     JPanel buttonPanel = new JPanel();
-                    buttonPanel.add(approveButton);
+                    buttonPanel.add(rescheduleButton);
                     buttonPanel.setBackground(new Color(0xB9E5E8));
-                    buttonPanel.add(rejectButton);
                     linePanel.add(buttonPanel, BorderLayout.EAST);
 
                     panel.add(linePanel);
@@ -139,14 +131,6 @@ public class ApproveAppointmentPanel extends JFrame implements ActionListener {
             writer.close();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error updating appointment status: " + e.getMessage());
-        }
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == back) {
-            this.dispose();
-            new LecturerDashboardPanel();
         }
     }
 }

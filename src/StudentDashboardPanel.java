@@ -8,7 +8,7 @@ import java.util.Calendar;
 public class StudentDashboardPanel extends JFrame implements ActionListener {
 
     private JLabel welcomeLabel;
-    private JButton MakeConsult, logoutBtn;
+    private JButton MakeConsult, logoutBtn, reschedule;
 
     SimpleDateFormat timeFormat;
     SimpleDateFormat dateFormat;
@@ -50,6 +50,10 @@ public class StudentDashboardPanel extends JFrame implements ActionListener {
         MakeConsult = FrameMethods.buttonSetup("Make Consultation","Arial",25,0x000000,this,225,100,350,100,0X7AB2D3);
         this.add(MakeConsult);
 
+        reschedule = FrameMethods.buttonSetup("Reschedule Appointment","Arial",25,0x000000,this,225,220,350,100,0X7AB2D3);
+        this.add(reschedule);
+
+
         logoutBtn = FrameMethods.buttonSetup("LogOut","Arial",20,0x000000,this,50,500,115,50,0X7AB2D3);
         this.add(logoutBtn);
 
@@ -73,6 +77,13 @@ public class StudentDashboardPanel extends JFrame implements ActionListener {
             SessionManager.getInstance().clearSession();
             new UserSelect();
             this.dispose();
+        } else if (e.getSource() == reschedule) {
+            new RescheduleAppointment();
+            this.dispose();
         }
+    }
+
+    public static void main(String[] args) {
+        new StudentDashboardPanel();
     }
 }
