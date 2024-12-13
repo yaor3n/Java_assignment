@@ -7,13 +7,13 @@ import java.util.ArrayList;
 
 public class setReschedule extends JFrame implements ActionListener {
 
-    private JLabel label, label2;
+    private JLabel label, label2, label3;
     private JComboBox<String> timeSlotCB, dayCB, monthCB, yearCB, lecCB;
     private JButton back, confirmBtn;
     private ArrayList<String> lecturers = new ArrayList<>();
 
     setReschedule() {
-        label = FrameMethods.labelSetup("Set Available Time:", "Arial", 25, 0x000000, 50, 5, 300, 100);
+        label = FrameMethods.labelSetup("Change Time:", "Arial", 25, 0x000000, 50, 5, 300, 100);
         this.add(label);
 
         String[] timeSlots = {
@@ -32,7 +32,7 @@ public class setReschedule extends JFrame implements ActionListener {
         timeSlotCB.setBackground(new Color(0xFFFFFF));
         this.add(timeSlotCB);
 
-        label2 = FrameMethods.labelSetup("Set Available Date:", "Arial", 25, 0x000000, 50, 150, 300, 100);
+        label2 = FrameMethods.labelSetup("Change Date:", "Arial", 25, 0x000000, 50, 150, 300, 100);
         this.add(label2);
 
         String[] days = new String[31];
@@ -67,6 +67,9 @@ public class setReschedule extends JFrame implements ActionListener {
         yearCB.setForeground(new Color(0x000000));
         yearCB.setBackground(new Color(0xFFFFFF));
         this.add(yearCB);
+
+        label3 = FrameMethods.labelSetup("Change Lecturer:", "Arial", 25, 0x000000, 50, 295, 300, 100);
+        this.add(label3);
 
         lecCB = new JComboBox<>();
         lecCB.setBounds(50, 380, 350, 35);
@@ -120,7 +123,6 @@ public class setReschedule extends JFrame implements ActionListener {
 
             updateConsultationBooking("consultation.txt", loggedInStudent, lecCB.getSelectedItem().toString(), timeSlot, day + " " + month + " " + year);
 
-            JOptionPane.showMessageDialog(this, "Appointment successfully rescheduled!");
             new RescheduleAppointment();
             this.dispose();
         } else if (e.getSource() == back) {
@@ -167,7 +169,7 @@ public class setReschedule extends JFrame implements ActionListener {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(content.toString());
             if (statusUpdated) {
-                JOptionPane.showMessageDialog(this, "Consultation booking updated successfully with 'reschedule' status!");
+                JOptionPane.showMessageDialog(this, "Consultation booking has been rescheduled!");
             } else {
                 JOptionPane.showMessageDialog(this, "No matching consultation found for the logged-in student.");
             }
