@@ -74,7 +74,7 @@ public class ConsultLec extends JFrame implements ActionListener {
                     JButton bookButton = new JButton("Book");
                     bookButton.addActionListener(e -> {
                         // When the button is clicked, append the studentUsername and write to a file
-                        String updatedLine = appointment + " | Booked by: " + studentUsername + "," + "pending";
+                        String updatedLine = appointment + " | Booked by: " + studentUsername + "," + " pending";
                         appendToFile("consultation.txt", updatedLine);
                         JOptionPane.showMessageDialog(this, "Booking appointment: " + updatedLine);
                         this.dispose();

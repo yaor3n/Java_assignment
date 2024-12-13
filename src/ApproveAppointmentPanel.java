@@ -60,8 +60,14 @@ public class ApproveAppointmentPanel extends JFrame implements ActionListener {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                // Only show appointments that are pending
-                if (line.contains(lecturerUsername) && line.contains("pending") || line.contains("reschedule")) {
+
+                // need to add the "," cuz if not it will still read substring as lecturerUsername
+                // so like if a name start with lec & another name is lecturer, both will be read
+                // if (line.startsWith(lecturerUsername + ",") && line.contains("pending") || line.contains("reschedule")) {
+                // ^^ previous code still doesnt work even if it has line.starts etc cuz missing brackets for the 2 logic behind
+                // if no (line.contains("pending") || line.contains("reschedule")) then i will still check for these 2 string in other lecturer slot
+                if (line.startsWith(lecturerUsername + ",") && (line.contains("pending") || line.contains("reschedule"))) {
+
                     hasPendingAppointments = true;
 
                     JPanel linePanel = new JPanel();
@@ -79,7 +85,7 @@ public class ApproveAppointmentPanel extends JFrame implements ActionListener {
                     // Approve Button
                     JButton approveButton = new JButton("Approve");
                     approveButton.addActionListener(e -> {
-                        String updatedLine = appointment.replace("pending", "approved");
+                        String updatedLine = appointment.replace("pending", "approved").replace("reschedule", "approved");
                         updateAppointmentStatus("consultation.txt", appointment, updatedLine);
                         JOptionPane.showMessageDialog(this, "Appointment approved: " + updatedLine);
                         this.dispose();
@@ -89,7 +95,7 @@ public class ApproveAppointmentPanel extends JFrame implements ActionListener {
                     // Reject Button
                     JButton rejectButton = new JButton("Reject");
                     rejectButton.addActionListener(e -> {
-                        String updatedLine = appointment.replace("pending", "rejected");
+                        String updatedLine = appointment.replace("pending", "rejected").replace("reschedule", "rejected");
                         updateAppointmentStatus("consultation.txt", appointment, updatedLine);
                         JOptionPane.showMessageDialog(this, "Appointment rejected: " + updatedLine);
                         this.dispose();

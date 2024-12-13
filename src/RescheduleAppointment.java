@@ -13,6 +13,7 @@ public class RescheduleAppointment extends JFrame implements ActionListener {
 
     RescheduleAppointment() {
 
+
         panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
@@ -63,7 +64,7 @@ public class RescheduleAppointment extends JFrame implements ActionListener {
             String line;
             while ((line = reader.readLine()) != null) {
                 // Only show appointments that are pending
-                if (line.contains("pending")) {
+                if (line.contains("pending") || line.contains("approved") || line.contains("rejected")) {
                     hasPendingAppointments = true;
 
                     JPanel linePanel = new JPanel();
@@ -81,11 +82,8 @@ public class RescheduleAppointment extends JFrame implements ActionListener {
                     // Reschedule Button
                     rescheduleButton = new JButton("Reschedule");
                     rescheduleButton.addActionListener(e -> {
-                        String updatedLine = appointment.replace("pending", "reschedule");
-                        updateAppointmentStatus("consultation.txt", appointment, updatedLine);
-                        JOptionPane.showMessageDialog(this, "Appointment rescheduled: " + updatedLine);
                         this.dispose();
-                        new StudentDashboardPanel();
+                        new setReschedule();
                     });
 
 
@@ -109,28 +107,5 @@ public class RescheduleAppointment extends JFrame implements ActionListener {
         return hasPendingAppointments;
     }
 
-    private void updateAppointmentStatus(String filePath, String oldLine, String updatedLine) {
-        try {
-            // Read the file and update the appointment status
-            BufferedReader reader = new BufferedReader(new FileReader(filePath));
-            StringBuilder fileContents = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.equals(oldLine)) {
-                    fileContents.append(updatedLine);
-                } else {
-                    fileContents.append(line);
-                }
-                fileContents.append(System.lineSeparator()); // Ensure new lines are preserved
-            }
-            reader.close();
 
-            // Write the updated content back to the file
-            BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
-            writer.write(fileContents.toString());
-            writer.close();
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Error updating appointment status: " + e.getMessage());
-        }
-    }
 }

@@ -12,7 +12,6 @@ public class AppointSetupDash extends JFrame implements ActionListener {
     private JButton back, confirmBtn;
 
     public AppointSetupDash() {
-        String lecturerUsername = SessionManager.getLecturerUsername();
 
         label = FrameMethods.labelSetup("Set Available Time:", "Arial", 25, 0x000000, 50, 5, 300, 100);
         this.add(label);
