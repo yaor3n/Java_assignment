@@ -2,3 +2,4 @@ lec1,09:00 AM - 10:00 AM,01 January 2023
 lec2,09:00 AM - 10:00 AM,01 January 2023
 lec3,09:00 AM - 10:00 AM,01 January 2023
 lec4,09:00 AM - 10:00 AM,01 January 2023
+lec1,09:00 AM - 10:00 AM,01 January 2025

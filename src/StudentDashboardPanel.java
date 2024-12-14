@@ -8,7 +8,7 @@ import java.util.Calendar;
 public class StudentDashboardPanel extends JFrame implements ActionListener {
 
     private JLabel welcomeLabel;
-    private JButton MakeConsult, logoutBtn, reschedule;
+    private JButton MakeConsult, logoutBtn, viewAppointments, feedback, reschedule;
 
     SimpleDateFormat timeFormat;
     SimpleDateFormat dateFormat;
@@ -43,7 +43,6 @@ public class StudentDashboardPanel extends JFrame implements ActionListener {
         Timer timer = new Timer(1000, e -> updateClock());
         timer.start();
 
-
         welcomeLabel = FrameMethods.labelSetup("Hello, " + studentUsername + "!","Arial",25,0x000000,50,5,700,100);
         this.add(welcomeLabel);
 
@@ -53,10 +52,14 @@ public class StudentDashboardPanel extends JFrame implements ActionListener {
         reschedule = FrameMethods.buttonSetup("Reschedule Appointment","Arial",25,0x000000,this,225,220,350,100,0X7AB2D3);
         this.add(reschedule);
 
+        viewAppointments = FrameMethods.buttonSetup("View Appointment","Arial",25,0x000000,this,225,340,350,100,0X7AB2D3);
+        this.add(viewAppointments);
+
+        feedback = FrameMethods.buttonSetup("Feedback","Arial",25,0x000000,this,225,460,350,100,0X7AB2D3);
+        this.add(feedback);
 
         logoutBtn = FrameMethods.buttonSetup("LogOut","Arial",20,0x000000,this,50,500,115,50,0X7AB2D3);
         this.add(logoutBtn);
-
 
     }
 
@@ -79,6 +82,12 @@ public class StudentDashboardPanel extends JFrame implements ActionListener {
             this.dispose();
         } else if (e.getSource() == reschedule) {
             new RescheduleAppointment();
+            this.dispose();
+        } else if (e.getSource() == viewAppointments) {
+            new ViewAppStud();
+            this.dispose();
+        } else if (e.getSource() == feedback) {
+            new FeedbackStud();
             this.dispose();
         }
     }

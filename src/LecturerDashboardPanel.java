@@ -9,7 +9,7 @@ import java.util.Calendar;
 public class LecturerDashboardPanel extends JFrame implements ActionListener {
 
     private JLabel welcomeLabel;
-    private JButton setAppointmentBtn, approveAppointmentBtn, logoutBtn;
+    private JButton setAppointmentBtn, approveAppointmentBtn, viewAppointments, feedback, logoutBtn;
 
     SimpleDateFormat timeFormat;
     SimpleDateFormat dateFormat;
@@ -51,6 +51,11 @@ public class LecturerDashboardPanel extends JFrame implements ActionListener {
         approveAppointmentBtn = FrameMethods.buttonSetup("Approve Appointment","Arial",25,0x000000,this,225,220,350,100,0X7AB2D3);
         this.add(approveAppointmentBtn);
 
+        viewAppointments = FrameMethods.buttonSetup("View Appointment","Arial",25,0x000000,this,225,340,350,100,0X7AB2D3);
+        this.add(viewAppointments);
+
+        feedback = FrameMethods.buttonSetup("Feedback","Arial",25,0x000000,this,225,460,350,100,0X7AB2D3);
+        this.add(feedback);
 
         logoutBtn = FrameMethods.buttonSetup("LogOut","Arial",20,0x000000,this,50,500,115,50,0X7AB2D3);
         this.add(logoutBtn);
@@ -78,6 +83,12 @@ public class LecturerDashboardPanel extends JFrame implements ActionListener {
             SessionManager.getInstance().clearSession();
             this.dispose();
             new UserSelect();
+        } else if (e.getSource() == viewAppointments) {
+            new ViewAppLec();
+            this.dispose();
+        } else if (e.getSource() == feedback) {
+            new FeedbackLec();
+            this.dispose();
         }
     }
     public static void main(String[] args) {
