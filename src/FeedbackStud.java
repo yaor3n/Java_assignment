@@ -4,9 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
 
 public class FeedbackStud extends JFrame implements ActionListener {
@@ -16,7 +14,8 @@ public class FeedbackStud extends JFrame implements ActionListener {
     private JPanel panel1, panel2;
     private JLabel label1, label2;
 
-    private List<String> lecturerUsernames = new ArrayList<>(); // To store student usernames
+    private List<String> lecturerUsernames = new ArrayList<>();
+    private Map<String, List<String>> lecturerFeedback = new HashMap<>();
 
     FeedbackStud() {
 
@@ -29,7 +28,6 @@ public class FeedbackStud extends JFrame implements ActionListener {
 
         label1 = FrameMethods.labelSetup("Give Feedback for Lecturers:", "Arial", 25, 0x000000, 50, -5, 700, 100);
         this.add(label1);
-
         scrollPane1.setBounds(50, 60, 700, 200);
 
         label2 = FrameMethods.labelSetup("View Feedback from Lecturers:", "Arial", 25, 0x000000, 50, 255, 700, 100);
@@ -38,7 +36,6 @@ public class FeedbackStud extends JFrame implements ActionListener {
         panel2 = new JPanel();
         panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
         scrollPane2 = new JScrollPane(panel2);
-
         scrollPane2.setBounds(50, 320, 700, 200);
 
         getContentPane().add(scrollPane1);
@@ -55,32 +52,84 @@ public class FeedbackStud extends JFrame implements ActionListener {
         ImageIcon icon = new ImageIcon("resources/icon1.png");
         setIconImage(icon.getImage());
 
-        loadStudents(); // Load students from Accounts.txt
-        displayStudents(); // Display students with feedback buttons
+        loadLecturers();
+        loadFeedback();
+        displayLecturers();
+        displayFeedback();
 
         setVisible(true);
     }
 
-    private void loadStudents() {
-        // Load student usernames from Accounts.txt
-        try (BufferedReader reader = new BufferedReader(new FileReader("Accounts.txt"))) {
+    private void loadLecturers() {
+        File file = new File("Accounts.txt");
+        if (!file.exists()) {
+            JOptionPane.showMessageDialog(this, "Accounts.txt file not found!");
+            return;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
-                String username = parts[0].trim();
-                String accountType = parts[2].trim();
+                if (parts.length >= 3) {
+                    String username = parts[0].trim();
+                    String accountType = parts[2].trim();
 
-                if (accountType.equalsIgnoreCase("Lecturer")) {
-                    lecturerUsernames.add(username);
+                    if (accountType.equalsIgnoreCase("Lecturer")) {
+                        lecturerUsernames.add(username);
+                    }
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error reading Accounts.txt: " + e.getMessage());
         }
     }
 
-    private void displayStudents() {
-        // Display each student with a feedback button
+    private void loadFeedback() {
+        File file = new File("feedback.txt");
+        if (!file.exists()) {
+            JOptionPane.showMessageDialog(this, "feedback.txt file not found!");
+            return;
+        }
+
+        String studentUsername = SessionManager.getStudentUsername(); // Get the logged-in student's username
+        System.out.println("Logged in student: " + studentUsername); // Debugging line
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("Feedback for")) {
+                    // Example: Feedback for stud1 from lec1: good talk
+                    String[] parts = line.split(":");
+                    if (parts.length == 2) {
+                        String feedbackDetails = parts[1].trim();
+                        String lecturerInfo = parts[0].substring(12).trim(); // Extract "stud1 from lec1"
+                        String[] lecturerParts = lecturerInfo.split(" from ");
+
+                        if (lecturerParts.length == 2) {
+                            String studentName = lecturerParts[0].trim(); // Extract student name
+                            String lecturerUsername = lecturerParts[1].trim(); // Extract lecturer name
+
+                            // Only load feedback for the currently logged-in student
+                            if (studentName.equals(studentUsername)) {
+                                System.out.println("Adding feedback: " + feedbackDetails + " for lecturer: " + lecturerUsername); // Debugging line
+
+                                lecturerFeedback.putIfAbsent(lecturerUsername, new ArrayList<>());
+                                lecturerFeedback.get(lecturerUsername).add(feedbackDetails);
+                            }
+                        } else {
+                            System.out.println("Line format error: Incorrect lecturer information - " + line);
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error reading feedback.txt: " + e.getMessage());
+        }
+    }
+
+
+    private void displayLecturers() {
         for (String lecturerUsername : lecturerUsernames) {
             JPanel lecturerPanel = new JPanel();
             lecturerPanel.setLayout(new BorderLayout());
@@ -93,55 +142,90 @@ public class FeedbackStud extends JFrame implements ActionListener {
             lecturerLabel.setPreferredSize(new Dimension(600, 30));
 
             JButton feedbackButton = new JButton("Give Feedback");
-            feedbackButton.addActionListener(e -> {
-                // When the button is clicked, open a feedback form or dialog
-                showFeedbackDialog(lecturerUsername);
-            });
+            feedbackButton.addActionListener(e -> showFeedbackDialog(lecturerUsername));
 
-            // Add the student label to the center of the panel
             lecturerPanel.add(lecturerLabel, BorderLayout.CENTER);
-            // Add the feedback button to the right of the panel
             lecturerPanel.add(feedbackButton, BorderLayout.EAST);
-
             panel1.add(lecturerPanel);
         }
 
-        // Refresh the panel to display the students
         panel1.revalidate();
         panel1.repaint();
     }
 
-    private void showFeedbackDialog(String lecturerUsername) {
-        // Create a dialog to input feedback for the selected student
-        String feedback = JOptionPane.showInputDialog(this, "Enter feedback for " + lecturerUsername);
-        if (feedback != null && !feedback.trim().isEmpty()) {
-            saveFeedback(lecturerUsername, feedback);
-        }
-    }
-
     private void saveFeedback(String lecturerUsername, String feedback) {
-        // Save the feedback to a file
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("feedback.txt", true))) {
-            String studentName = SessionManager.getStudentUsername(); // Get the currently logged-in student's username
-            if (studentName == null || studentName.trim().isEmpty()) {
-                studentName = "UnknownStudent"; // Default to "UnknownStudent" if not available
-            }
+            String studentUsername = SessionManager.getStudentUsername();
 
-            // Write the feedback in the desired format
-            writer.write("Feedback for " + lecturerUsername + " from " + studentName + ": " + feedback);
-            writer.newLine(); // Write a newline after each entry
+            String formattedFeedback = "Feedback for " + lecturerUsername + " from " + studentUsername + ": " + feedback;
+
+            writer.write(formattedFeedback);
+            writer.newLine();
+
+            // Add the feedback to the lecturer feedback map
+            lecturerFeedback.putIfAbsent(lecturerUsername, new ArrayList<>());
+            lecturerFeedback.get(lecturerUsername).add(feedback);
 
             JOptionPane.showMessageDialog(this, "Feedback saved for " + lecturerUsername);
+            displayFeedback();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error saving feedback: " + e.getMessage());
         }
     }
 
+    private void showFeedbackDetails(String lecturerUsername) {
+        List<String> feedbackList = lecturerFeedback.get(lecturerUsername);
+        if (feedbackList != null && !feedbackList.isEmpty()) {
+            StringBuilder feedbackDetails = new StringBuilder();
+            for (String feedback : feedbackList) {
+                feedbackDetails.append(feedback).append("\n");
+            }
+            JOptionPane.showMessageDialog(this, "Feedback for " + lecturerUsername + ":\n" + feedbackDetails.toString());
+        } else {
+            JOptionPane.showMessageDialog(this, "No feedback found for " + lecturerUsername);
+        }
+    }
+
+    private void showFeedbackDialog(String lecturerUsername) {
+        String feedback = JOptionPane.showInputDialog(this, "Enter feedback for " + lecturerUsername);
+        if (feedback != null && !feedback.trim().isEmpty()) {
+            saveFeedback(lecturerUsername, feedback);
+        } else {
+            JOptionPane.showMessageDialog(this, "Feedback cannot be empty.");
+        }
+    }
+
+    private void displayFeedback() {
+        panel2.removeAll(); // Clear existing components before adding new ones
+
+        for (String lecturerUsername : lecturerFeedback.keySet()) {
+            JPanel feedbackPanel = new JPanel();
+            feedbackPanel.setLayout(new BorderLayout());
+            feedbackPanel.setPreferredSize(new Dimension(680, 50));
+            feedbackPanel.setMaximumSize(new Dimension(680, 50));
+            feedbackPanel.setBackground(new Color(0xB9E5E8));
+            feedbackPanel.setBorder(new LineBorder(Color.GRAY, 1));
+
+            JLabel feedbackLabel = new JLabel("Feedback from " + lecturerUsername);
+            feedbackLabel.setPreferredSize(new Dimension(500, 30));
+
+            JButton viewFeedbackButton = new JButton("View Feedback");
+            viewFeedbackButton.addActionListener(e -> showFeedbackDetails(lecturerUsername));
+
+            feedbackPanel.add(feedbackLabel, BorderLayout.CENTER);
+            feedbackPanel.add(viewFeedbackButton, BorderLayout.EAST);
+
+            panel2.add(feedbackPanel);
+        }
+
+        panel2.revalidate();
+        panel2.repaint();
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == back) {
-            new LecturerDashboardPanel();
+            new StudentDashboardPanel();
             this.dispose();
         }
     }

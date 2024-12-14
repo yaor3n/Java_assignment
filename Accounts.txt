@@ -5,3 +5,4 @@ lec4,123,Lecturer
 stud1,123,Student
 stud2,123,Student
 stud3,123,Student
+stud4,123,Student

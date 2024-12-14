@@ -167,7 +167,7 @@ public class FeedbackLec extends JFrame implements ActionListener {
             studentFeedback.putIfAbsent(studentUsername, new ArrayList<>());
             studentFeedback.get(studentUsername).add(feedback);
 
-            // Display the feedback after saving it
+            JOptionPane.showMessageDialog(this, "Feedback saved for " + studentUsername);
             displayFeedback();
         } catch (IOException e) {
             JOptionPane.showMessageDialog(this, "Error saving feedback: " + e.getMessage());
