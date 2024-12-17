@@ -83,10 +83,12 @@ public class RescheduleAppointment extends JFrame implements ActionListener {
                     // Reschedule Button
                     rescheduleButton = new JButton("Reschedule");
                     rescheduleButton.addActionListener(e -> {
-                        this.dispose();
-                        new setReschedule();
+                        int response = JOptionPane.showConfirmDialog(this,"Proceed to reschedule?", "Confirm reschedule", JOptionPane.YES_OPTION);
+                        if (response == JOptionPane.YES_OPTION) {
+                            this.dispose();
+                            new setReschedule();
+                        }
                     });
-
 
                     // Add components to the panel
                     linePanel.add(label, BorderLayout.CENTER);

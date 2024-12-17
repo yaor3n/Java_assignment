@@ -1,8 +1,8 @@
 lec1,09:00 AM - 10:00 AM,01 January 2023 | Booked by: stud1, approved
 lec1,10:00 AM - 11:00 AM,01 January 2025 | Booked by: stud1, rejected
-lec2,09:00 AM - 10:00 AM,01 January 2023 | Booked by: stud1, approved
 lec1,09:00 AM - 10:00 AM,01 January 2023 | Booked by: stud2, approved
 lec1,10:00 AM - 11:00 AM,01 January 2025 | Booked by: stud2, rejected
 lec2,09:00 AM - 10:00 AM,01 January 2023 | Booked by: stud2, approved
 lec3,01:00 PM - 02:00 PM,03 June 2028 | Booked by: stud2, rejected
 lec4,01:00 PM - 02:00 PM,05 April 2025 | Booked by: stud1, approved
+lec3,11:00 AM - 12:00 PM,11 November 2030 | Booked by: stud1, approved
