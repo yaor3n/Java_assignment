@@ -128,4 +128,7 @@ public class ConfirmReschedule extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this, "Error writing to file: " + e.getMessage());
         }
     }
+    public static void main(String[] args) {
+        new ConfirmReschedule();
+    }
 }
