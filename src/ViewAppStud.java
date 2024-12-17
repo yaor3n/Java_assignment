@@ -74,8 +74,8 @@ public class ViewAppStud extends JFrame implements ActionListener {
                     // Extract student username from "Booked by: <username>"
                     String bookedByStudent = bookedByPart.split(":")[1].trim();
 
-                    // Only process appointments booked by the current student
-                    if (bookedByStudent.equalsIgnoreCase(currentStudent)) {
+                    // fixed issue where stud can see appointments that are pending/resched
+                    if (bookedByStudent.equalsIgnoreCase(currentStudent) && line.contains("approved")) {
                         // Extract dateTime and parse the appointment date
                         String dateTime = firstPart[1].trim(); // e.g., "09:00 AM - 10:00 AM,01 January 2023"
                         Date appointmentDate = dateFormat.parse(dateTime);

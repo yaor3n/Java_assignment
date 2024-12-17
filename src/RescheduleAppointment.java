@@ -60,11 +60,14 @@ public class RescheduleAppointment extends JFrame implements ActionListener {
     private boolean readConsultationsFromFile(String filePath) {
         boolean hasPendingAppointments = false;
 
+        String currentStudent = SessionManager.getStudentUsername();
+
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                // Only show appointments that are pending
-                if (line.contains("pending") || line.contains("approved") || line.contains("rejected")) {
+
+                // finally fixed bruh
+                if (line.contains("Booked by: " + currentStudent)) {
                     hasPendingAppointments = true;
 
                     JPanel linePanel = new JPanel();
@@ -76,8 +79,6 @@ public class RescheduleAppointment extends JFrame implements ActionListener {
 
                     JLabel label = new JLabel(line);
                     label.setPreferredSize(new Dimension(600, 30));
-
-                    final String appointment = line;
 
                     // Reschedule Button
                     rescheduleButton = new JButton("Reschedule");

@@ -75,8 +75,8 @@ public class ViewAppLec extends JFrame implements ActionListener {
                     // Extract booked by student username
                     String bookedByStudent = parts[1].split(",")[0].replace("Booked by:", "").trim();
 
-                    // Only process appointments for the logged-in lecturer
-                    if (lecturerName.equalsIgnoreCase(currentLecturer)) {
+                    // this makes sur that it only show the current logged in lec + appointments with approved status
+                    if (lecturerName.equalsIgnoreCase(currentLecturer) && line.contains("approved")) {
                         // Parse the appointment date
                         Date appointmentDate = dateFormat.parse(dateTime);
 
